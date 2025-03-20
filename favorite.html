@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Favorites - H&&M Bookstore</title>
+    <style>
+        /* General body styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: floralwhite;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh; /* Full viewport height */
+        }
+
+        /* Header styling */
+        .header {
+            background: linear-gradient(to right, #9702b0, #f9cafe);
+            text-align: center;
+            padding: 20px;
+            font-size: 36px;
+            font-weight: bold;
+            color: black;
+            position: fixed; /* Fixed at the top */
+            top: 0;
+            left: 0;
+            width: 100%; /* Span the full width */
+            z-index: 1000; /* Ensure it stays above other content */
+        }
+
+        /* Scrollable middle section */
+        .scrollable-content {
+            flex-grow: 1; /* Takes up remaining space */
+            overflow-y: auto; /* Enables vertical scrolling */
+            margin-top: 120px; /* Space for the fixed header */
+            margin-bottom: 80px; /* Space for the fixed footer */
+            padding: 20px; /* Add some padding */
+        }
+
+        /* Favorites container styling */
+        .favorites-container {
+            max-width: 80%;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Favorites item styling */
+        .favorites-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+        }
+
+        .favorites-item img {
+            width: 100px;
+            height: auto;
+            border-radius: 5px;
+            margin-right: 20px;
+        }
+
+        .favorites-item-details {
+            flex-grow: 1;
+        }
+
+        .favorites-item-details h4 {
+            margin: 0;
+            font-size: 20px;
+            color: #333;
+        }
+
+        .favorites-item-details p {
+            margin: 5px 0;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .favorites-item-price {
+            font-size: 18px;
+            font-weight: bold;
+            margin-left: 20px;
+            color: #e67e22;
+        }
+
+        /* Unfavorite button styling */
+        .unfavorite-button {
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+
+        .unfavorite-button:hover {
+            background-color: #c62828;
+        }
+
+        /* No favorites message */
+        .no-favorites {
+            text-align: center;
+            font-size: 18px;
+            color: #888;
+        }
+
+        /* Footer styling */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #9702b0;
+            color: white;
+            font-size: 18px;
+            position: fixed; /* Fixed at the bottom */
+            bottom: 0;
+            left: 0;
+            width: 100%; /* Span the full width */
+            z-index: 1000; /* Ensure it stays above other content */
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">My favourite &#x1F4D6; in H&&M Bookstore</div>
+
+    <!-- Scrollable Middle Section -->
+    <div class="scrollable-content">
+        <!-- Favorites Container -->
+        <div class="favorites-container" id="favorites-container">
+            <!-- Favorites will be dynamically rendered here -->
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">Thank you for shopping with us!</div>
+
+    <script>
+        // Sample array of favorite books
+        let favorites = [
+            {
+                id: 1,
+                title: "Harry Potter and the Sorcerer's Stone",
+                author: "J.K. Rowling",
+                price: 19.99,
+                coverImage: "https://m.media-amazon.com/images/I/81DI+BAN2SL._SY522_.jpg"
+            },
+            {
+                id: 2,
+                title: "1984",
+                author: "George Orwell",
+                price: 15.99,
+                coverImage: "https://m.media-amazon.com/images/I/41KzoY18SyL._SY445_SX342_.jpg"
+            }
+        ];
+
+        // Function to render favorites
+        function myFavorites() {
+            const container = document.getElementById('favorites-container');
+            container.innerHTML = ''; // Clear previous content
+
+            if (favorites.length == 0) {
+                // If no favorites, show the "No items" message
+                container.innerHTML = `
+                    <p class="no-favorites">No items added to favorites yet.</p>
+                `;
+            } else {
+                // If there are favorites, render them
+                favorites.forEach((item, index) => {
+                    container.innerHTML += `
+                        <div class="favorites-item" id="favorite-${item.id}">
+                            <img src="${item.coverImage}" alt="${item.title}">
+                            <div class="favorites-item-details">
+                                <h4>${item.title}</h4>
+                                <p>by ${item.author}</p>
+                                <p>$${item.price}</p>
+                            </div>
+                            <button class="unfavorite-button" onclick="removeFavorites(${item.id})">Unfavorite</button>
+                        </div>
+                    `;
+                });
+            }
+        }
+
+        // Function to remove an item from favorites
+        function removeFavorites(itemId) {
+            // Filter out the item with the matching ID
+            favorites = favorites.filter(item => item.id !== itemId);
+
+            // Re-render the favorites list
+            myFavorites();
+        }
+
+        // Call the renderFavorites function on page load
+        myFavorites();
+    </script>
+</body>
+</html>

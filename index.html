@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>H&&M Bookstore</title>
+    <style>
+        .error-message {
+            margin-bottom: 10px;
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: red;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+
+        .success-message {
+            margin-bottom: 10px;
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: green;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+
+        /* General Reset */
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #9702b0, #f9cafe);
+        }
+
+        /* Centering Content */
+        .container {
+            text-align: center;
+            width: 100%;
+            max-width: 1000px;
+            padding: 0 20px;
+        }
+
+        .header {
+            text-align: center;
+            padding: 20px;
+            font-size: 84px;
+            font-weight: bold;
+            justify-content: center;
+        }
+
+        /* Subtitle */
+        p {
+            font-size: 26px;
+            color: #333;
+            margin-bottom: 50px;
+        }
+
+        /* Form Container */
+        .form-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .form-wrapper {
+            flex: 1;
+            max-width: 250px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            box-sizing: border-box;
+            margin-bottom: 5px;
+        }
+
+        /* Buttons */
+        button {
+            width: 100%;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+            border-radius: 8px;
+            background-color: #9702b0;
+            color: white;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s, background-color 0.3s;
+            margin-bottom: 30px;
+            margin-top: 15px;
+        }
+
+        button:hover {
+            background-color: #b7791f;
+            transform: scale(1.05);
+        }
+
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            .form-container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .form-wrapper {
+                max-width: 100%;
+                width: 100%;
+            }
+
+            .logo h1 {
+                font-size: 48px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">&#x1F4D6; H&amp;&amp;M Bookstore</div>
+        <p>Welcome to H&&M where you can buy fantastic books!</p>
+
+        <!-- Error and Success Messages -->
+        <div id="invalidCredentials" class="error-message">Invalid username or password. Please try again.</div>
+        <div id="signupSuccess" class="success-message">Registration successful! You can now log in.</div>
+
+        <div class="form-container">
+            <!-- Signup form -->
+            <div class="form-wrapper">
+                <form action="http://localhost:9999/ebookshop/signup" method="POST">
+                    <div class="input-group">
+                        <input type="text" name="username" placeholder="Username" class="input-field" required>
+                        <input type="password" name="password" placeholder="Password" class="input-field" required>
+                    </div>
+                    <button type="submit" class="signup">Sign up</button>
+                </form>
+            </div>
+
+            <!-- Login form -->
+            <div class="form-wrapper">
+                <form action="http://localhost:9999/ebookshop/login" method="POST">
+                    <div class="input-group">
+                        <input type="text" name="username" placeholder="Username" class="input-field" required>
+                        <input type="password" name="password" placeholder="Password" class="input-field" required>
+                    </div>
+                    <button type="submit" class="login">Log in</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Function to show error or success messages based on URL parameters
+        window.onload = function() {
+            // Get URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            
+            // Check for error parameters
+            const error = urlParams.get('error');
+            if (error === 'invalid') {
+                document.getElementById('invalidCredentials').textContent = 'Invalid username or password. Please try again.';
+                showMessage('invalidCredentials');
+            } else if (error === 'usernametaken') {
+                document.getElementById('invalidCredentials').textContent = 'Username already exists. Please choose another.';
+                showMessage('invalidCredentials');
+            } else if (error === 'database') {
+                document.getElementById('invalidCredentials').textContent = 'Database error occurred. Please try again later.';
+                showMessage('invalidCredentials');
+            }
+            
+            // Check for success parameter (for future use)
+            const success = urlParams.get('success');
+            if (success === 'signup') {
+                showMessage('signupSuccess');
+            }
+        };
+        
+        // Function to show a message for 3 seconds
+        function showMessage(elementId) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.style.display = 'block';
+                
+                // Hide the message after 3 seconds
+                setTimeout(function() {
+                    element.style.display = 'none';
+                }, 3000);
+            }
+        }
+    </script>
+
+</body>
+
+</html>

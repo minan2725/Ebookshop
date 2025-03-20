@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>View Cart - H&&M Bookstore</title>
+    <style>
+        /* General body styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: floralwhite;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh; /* Full viewport height */
+        }
+
+        /* Header styling */
+        .header {
+            background: linear-gradient(to right, #9702b0, #f9cafe);
+            text-align: center;
+            padding: 20px;
+            font-size: 36px;
+            font-weight: bold;
+            color: black;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+         /* Scrollable middle section */
+        .scrollable-content {
+            flex-grow: 1; /* Takes up remaining space */
+            overflow-y: auto; /* Enables vertical scrolling */
+            margin-top: 120px; /* Space for the fixed header */
+            margin-bottom: 80px; /* Space for the fixed footer */
+            padding: 20px; /* Add some padding */
+        }
+
+        /* User details section */
+        .user-info {
+            width: 80%;
+            margin: 20px auto;
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .user-info p {
+            font-size: 16px;
+            margin: 10px 0;
+        }
+
+        .user-info input {
+            padding: 5px;
+            width: 100%;
+            font-size: 14px;
+        }
+
+        /* Cart container styling */
+        .cart-container {
+            width: 80%;
+            margin: 20px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Cart item styling */
+        .cart-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .cart-item img {
+            width: 80px;
+            height: auto;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+
+        .cart-item-details {
+            flex-grow: 1;
+        }
+
+        .cart-item-details h4 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .cart-item-details p {
+            margin: 5px 0;
+            font-size: 14px;
+            color: #555;
+        }
+
+        /* Quantity selector */
+        .quantity-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 5px;
+        }
+
+        .quantity-btn {
+            background-color: orange;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+
+        .quantity-input {
+            width: 30px;
+            text-align: center;
+            font-size: 16px;
+            border: 1px solid #ddd;
+        }
+
+        .cart-item-price {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        /* Checkbox styling */
+        .cart-item input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        /* Total price section */
+        .total-price {
+            text-align: right;
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        /* Order button container */
+        .order-button-container {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 10px;
+        }
+
+        /* Order button styling */
+        .order-button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .order-button:hover {
+            background-color: #45a049;
+        }
+
+        /* Footer styling */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #9702b0;
+            color: white;
+            font-size: 18px;
+            position: fixed; /* Fixed at the bottom */
+            bottom: 0;
+            left: 0;
+            width: 100%; /* Span the full width */
+            z-index: 1000; /* Ensure it stays above other content */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <div class="header">&#128092; My cart in H&&M Bookstore</div>
+
+    <!-- Scrollable Middle Section -->
+    <div class="scrollable-content">
+         <!-- User Info Section -->
+        <div class="user-info">
+            <p>Name: John Doe</p> 
+            <p>Enter your Email: <input type="text" name="user_email" /></p>
+            <p>Enter your Phone Number: <input type="text" name="user_phone" /></p>
+        </div>
+
+        <!-- Cart Container -->
+        <div class="cart-container">
+            <div class="cart-item">
+                <input type="checkbox" class="cart-checkbox" data-price="19.99">
+                <img src="https://m.media-amazon.com/images/I/81DI+BAN2SL._SY522_.jpg" alt="Harry Potter and the Sorcerer's Stone">
+                <div class="cart-item-details">
+                    <h4>Harry Potter and the Sorcerer's Stone</h4>
+                    <p>by J.K. Rowling</p>
+                    <div class="quantity-container">
+                        <button class="quantity-btn decrease">-</button>
+                        <input type="text" class="quantity-input" value="1" readonly>
+                        <button class="quantity-btn increase">+</button>
+                    </div>
+                </div>
+                <div class="cart-item-price">$<span class="price">19.99</span></div>
+            </div>
+
+            <div class="cart-item">
+                <input type="checkbox" class="cart-checkbox" data-price="15.99">
+                <img src="https://m.media-amazon.com/images/I/41KzoY18SyL._SY445_SX342_.jpg" alt="1984">
+                <div class="cart-item-details">
+                    <h4>1984</h4>
+                    <p>by George Orwell</p>
+                    <div class="quantity-container">
+                        <button class="quantity-btn decrease">-</button>
+                        <input type="text" class="quantity-input" value="1" readonly>
+                        <button class="quantity-btn increase">+</button>
+                    </div>
+                </div>
+                <div class="cart-item-price">$<span class="price">15.99</span></div>
+            </div>
+
+            <!-- Total Price Section -->
+            <div class="total-price">Total: $<span id="total">0.00</span></div>
+
+            <!-- Order Button -->
+            <div class="order-button-container">
+                <button class="order-button">Order</button>
+            </div>
+        </div>
+    </div>
+
+       <!-- Footer -->
+    <div class="footer">Thank you for shopping with us!</div>
+
+    <script>
+        document.querySelectorAll(".cart-item").forEach((item) => {
+            const decreaseBtn = item.querySelector(".decrease");
+            const increaseBtn = item.querySelector(".increase");
+            const quantityInput = item.querySelector(".quantity-input");
+            const priceElement = item.querySelector(".price");
+            const checkbox = item.querySelector(".cart-checkbox");
+
+            let basePrice = parseFloat(priceElement.textContent);
+
+            function updateTotal() {
+                let total = 0;
+                document.querySelectorAll(".cart-item").forEach((item) => {
+                    const checkbox = item.querySelector(".cart-checkbox");
+                    const priceElement = item.querySelector(".price");
+                    if (checkbox.checked) {
+                        total += parseFloat(priceElement.textContent);
+                    }
+                });
+                document.getElementById("total").textContent = total.toFixed(2);
+            }
+
+            increaseBtn.addEventListener("click", () => {
+                let quantity = parseInt(quantityInput.value);
+                quantity++;
+                quantityInput.value = quantity;
+                priceElement.textContent = (basePrice * quantity).toFixed(2);
+                updateTotal();
+            });
+            decreaseBtn.addEventListener("click", () => {
+                let quantity = parseInt(quantityInput.value);
+                if (quantity > 1) {
+                    quantity--;
+                    quantityInput.value = quantity;
+                    priceElement.textContent = (basePrice * quantity).toFixed(2);
+                    updateTotal();
+                }
+            });
+
+            checkbox.addEventListener("change", updateTotal);
+        });
+    </script>
+
+</body>
+</html>
+

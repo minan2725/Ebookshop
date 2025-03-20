@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">            <!-- for proper rendering of text -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">     <!-- dw website it to be too zoom in/out -->
+    <title>H&amp;&amp;M Bookstore</title>
+    <style>
+        /* General body styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: floralwhite;
+            margin: 0;
+            padding: 0;
+            display: flex; /* Use Flexbox for layout */
+            flex-direction: column; /* Arrange children vertically */
+            min-height: 100vh; /* Ensure the body takes up the full viewport height */
+        }
+
+        /* Header styling */
+        .header {
+            background: linear-gradient(to right, #9702b0, #f9cafe);
+            text-align: center;
+            padding: 20px;
+            font-size: 84px;
+            font-weight: bold;
+        }
+
+        .nav-bar {
+            display: flex;
+            justify-content: flex-end; /* Align items to the top-right */
+            padding: 10px 20px; /* Add some spacing */
+            background-color: floralwhite; /* Match the header's gradient color */
+        }
+
+        .nav-bar a {
+            text-decoration: none;
+            color: #9702b0; /* Match the header's primary color */
+            font-size: 18px;
+            font-weight: bold;
+            padding: 10px 15px;
+            border-radius: 5px;
+            background-color: white;
+            transition: background-color 0.3s ease;
+            margin-left: 10px; /* Add spacing between links */
+        }
+
+
+        .nav-bar a:hover {
+            background-color: #9702b0; /* Change background color on hover */
+            color: white; /* Change text color on hover */
+        }
+
+        .search-form {
+            margin: 20px;
+            padding: 20px;
+            background-color: #f9cafe;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-form b {
+            font-size: 18px;
+            margin-right: 10px;
+        }
+
+        .search-form input[type="checkbox"] {
+            margin-right: 5px;
+        }
+
+
+        /* Container to hold book cards with scrolling effect */
+        .container {
+            width: 60%;
+            margin: auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* Arranges books in 3 columns */
+            gap: 20px;
+            overflow-y: auto; /* Enables scrolling */
+            height: 400px; /* Set height for scrolling effect */
+            padding: 20px 0;
+            flex-grow: 1; /* Allow the container to grow and push the footer down */
+        }
+
+        /* Book card styling */
+        .book-card {
+            background: white;
+            padding: 20px;
+            border-radius: 40px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .book-card img {
+            width: 60%;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        .book-card h3 {
+            font-size: 32px;   /* gonna adjust font of bk title */
+            margin: 10px 0 5px;
+        }
+
+        .book-card p {
+            font-size: 22px;  /* gonna adjust font of author */
+            margin: 5px 0;
+            color: #555;
+        }
+
+        p.price {
+            font-size: 28px;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        /* Button container to hold Add to Cart and Love button */
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 5px;
+        }
+
+        .add-to-cart, .favourites-button {
+            border: none;
+            padding: 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .add-to-cart {
+            font-size: 24px;
+            background-color: #FFDE00;
+        }
+
+        .add-to-cart:hover {
+            background-color: darkgoldenrod; /* go change background color on hover */
+            color: white; /* become white text on hover */
+        }
+
+        .favourites-button {
+            background-color: white;
+            border: 2px solid #ff4d4d;
+            color: #ff4d4d;
+            border-radius: 50%; /* Makes it circular */
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .favourites-button:hover {
+            background-color: #ff4d4d;
+            color: white;
+        }
+
+        /* Footer styling */
+        .footer {
+            text-align: center;
+            padding: 25px;
+            background: linear-gradient(to right, #9702b0, #f9cafe);
+            font-size: 38px;
+            color: white;
+        }
+
+
+        /* Add notification styling */
+        .notification {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+            z-index: 1000;
+            display: none;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Notification div for add to cart success -->
+    <div id="notification" class="notification">Item added to cart successfully!</div>
+
+
+    <div class="header">&#x1F4D6; H&amp;&amp;M Bookstore</div>
+
+    <!-- Navigation Bar (Below Header) -->
+    <div class="nav-bar">
+        <!-- <a href="#cart">View Cart</a> -->
+        <a href="" id="viewCartLink">View Cart <span class="cart-badge" id="cartCount">0</span></a>
+        <a href="#favourites">Favourites</a>
+    </div>
+
+    <div class="search-form">
+        <form method="get" action="query">
+
+            <input type="hidden" name="username" id="usernameField" />
+
+            <b>Choose author(s):</b>
+            <input type="checkbox" name="author" value="J.K. Rowling" />J.K. Rowling
+            <input type="checkbox" name="author" value="George Orwell" />George Orwell
+            <input type="checkbox" name="author" value="Neil Gaiman" />Neil Gaiman
+            <input type="checkbox" name="author" value="Harper Lee" />Harper Lee
+            <input type="checkbox" name="author" value="Jane Austen" />Jane Austen
+            <input type="checkbox" name="author" value="F. Scott Fitzgerald" />F. Scott Fitzgerald
+            <input type="checkbox" name="author" value="J.D. Salinger" />J.D. Salinger
+            <br /><br />
+            Choose a price range:
+            <input type="radio" name="price" value="all" checked />All prices
+            <input type="radio" name="price" value="10" checked />less than $10
+            <input type="radio" name="price" value="15" />less than $15
+            <input type="radio" name="price" value="20" />less than $20
+            <!--
+            <form method="get" action="querymp">
+                <br /><br />
+                <input type="submit" value="Search" />
+                <input type="reset" value="Clear" />
+            </form>
+            -->
+            <input type="submit" value="Search" />
+            <input type="reset" value="Clear" />
+            
+        </form>
+    </div>
+
+
+    <script>
+        var username = '';
+        // Extract username from URL and set it in the hidden form field, maintain the user's session through the username parameter.
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            username = urlParams.get('username');
+            document.getElementById('usernameField').value = username;
+
+
+            // Update the View Cart link to include username
+            const viewCartLink = document.getElementById('viewCartLink');
+            if (viewCartLink) {
+                viewCartLink.href = "viewCart?username=" + (username || '');
+            }
+            
+            // Check for success parameter to show notification
+            if (urlParams.get('added') === 'true') {
+                showNotification();
+            }
+        };
+
+        // Function to show notification
+        function showNotification() {
+            const notification = document.getElementById('notification');
+            notification.style.display = 'block';
+            
+            // Hide after 3 seconds
+            setTimeout(function() {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+        
+        // Function to add to cart using AJAX
+        function addToCart(bookId) {
+            console.log(`Sending request to add book ID: ${bookId}, Username: ${username}`);
+    
+            // Use URLSearchParams instead of FormData
+            const params = new URLSearchParams();
+            params.append('id', bookId);
+            params.append('username', username || '');
+    
+            fetch('addToCart', {
+                method: 'POST',
+                body: params,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Content-Type': 'application/x-www-form-urlencoded' // Important!
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.text();
+                }
+                throw new Error('Network response was not ok.');
+            })
+            .then(count => {
+                console.log(`Received cart count: ${count}`);
+                // Update the cart count with the returned value
+                document.getElementById('cartCount').textContent = count;
+                showNotification();
+            })
+            .catch(error => {
+                console.error('Error adding to cart:', error);
+            });
+    
+            // Prevent default form submission
+            return false;
+        }
+
+    </script>
+
+
+    <div class="container">
+        <script>
+            const books = [
+                {id: 1, title: "Harry Potter and the Sorcerer's Stone", author: "J.K. Rowling", genre: "Fantasy", price: 19.99, coverImage: "https://m.media-amazon.com/images/I/81DI+BAN2SL._SY522_.jpg"},
+                {id: 2, title: "Harry Potter and the Chamber of Secrets", author: "J.K. Rowling", genre: "Fantasy", price: 19.99, coverImage: "https://m.media-amazon.com/images/I/51NUYJDvkgL._SY445_SX342_.jpg"},
+                {id: 3, title: "1984", author: "George Orwell", genre: "Dystopian", price: 15.99, coverImage: "https://m.media-amazon.com/images/I/41KzoY18SyL._SY445_SX342_.jpg"},
+                {id: 4, title: "The Hobbit", author: "J.R.R. Tolkien", genre: "Fantasy", price: 12.99, coverImage: "https://m.media-amazon.com/images/I/51QnRBHJ+sL._SY445_SX342_.jpg"},
+                {id: 5, title: "The Quite Nice and Fairly Accurate Good Omens", author: "Neil Gaiman", genre: "Fantasy", price: 14.99, coverImage: "https://m.media-amazon.com/images/I/71-G8t2nQeL._SY522_.jpg"},
+                {id: 6, title: "Fantastic Beast and Where To Find Them", author: "J.K. Rowling", genre: "Fantasy", price: 10.99, coverImage: "https://m.media-amazon.com/images/I/51LIgWAVG+L._SY445_SX342_.jpg"},
+                {id: 7, title: "To Kill a Mockingbird", author: "Harper Lee", genre: "Classic", price: 10.99, coverImage: "https://m.media-amazon.com/images/I/81aY1lxk+9L._SY522_.jpg"},
+                {id: 8, title: "Pride and Prejudice", author: "Jane Austen", genre: "Classic", price: 8.99, coverImage: "https://m.media-amazon.com/images/I/61BahDaTZXL._SY445_SX342_.jpg"},
+                {id: 9, title: "The Great Gatsby", author: "F. Scott Fitzgerald", genre: "Classic", price: 11.99, coverImage: "https://m.media-amazon.com/images/I/41NssxNlPlS._SY445_SX342_.jpg"},
+                {id: 10, title: "The Catcher in the Rye", author: "J.D. Salinger", genre: "Classic", price: 9.99, coverImage: "https://m.media-amazon.com/images/I/518dVCGFuhL._SY445_SX342_.jpg"}
+            ];
+
+            /* used unicode of &#x2764;&#xFE0F; for heart shape button hehe */
+            books.forEach(book => {
+                document.write(`
+                    <div class="book-card">
+                        <img src="${book.coverImage}" alt="${book.title}">
+                        <h3>${book.title}</h3>
+                        <p>by ${book.author}</p>
+                        <p class="price" >$${book.price}</p>
+                        <div class="button-container">
+                            <!-- 
+                            <button class="add-to-cart">Add to Cart</button>
+                            -->
+
+                            <button onclick="console.log('Book ID:', ${book.id}); addToCart(${book.id})" class="add-to-cart">Add to Cart</button>
+
+                            <button class="favourites-button"> &#x2764;&#xFE0F; </button> 
+                            
+                        </div>
+                    </div>
+                    `);
+            });
+        </script>
+    </div>
+
+    <div class="footer">Thank you!</div>
+</body>
+</html>
